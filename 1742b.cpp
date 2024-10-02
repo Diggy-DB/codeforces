@@ -1,54 +1,70 @@
-#include<iostream>
-void merge_sort(long long a[], long long n){
-    if(n>=2){
-        long long x[n/2], y[n-n/2];
-        for(long long i=0; i<n/2; i++){
-            x[i]=a[i];
-        }
-        merge_sort(x, n/2);
-        for(long long i=0; i<n-n/2; i++){
-            y[i]=a[n/2+i];
-        }
-        merge_sort(y, n-n/2);
-        int i=0, j=0;
-        for(int k=0; k<n; k++){
-            if(x[i]<=y[j] && i<n/2){
-                a[k]=x[i];
-                i++;
+#include<bits/stdc++.h>
+using namespace std;
+class BinaryTreeNode{
+public:
+    BinaryTreeNode(long long val){
+        l = NULL;
+        r = NULL;
+        data = val;
+    }
+
+    bool add_child(long long val){
+        if(val<data){
+            if(this->l!=NULL){
+                return this->l->add_child(val);
             }
             else{
-                if(x[i]>=y[j] && j<n-n/2){
-                    a[k]=y[j];
-                    j++;
+                this->l=new BinaryTreeNode(val);
+                return true;
+            }
+        }
+        else{
+            if(val>data){
+                if(this->r!=NULL){
+                    return this->r->add_child(val);
                 }
+                else{
+                    this->r=new BinaryTreeNode(val);
+                    return true;
+                }
+            }
+            else{
+                return false;
             }
         }
     }
+private:
+    BinaryTreeNode* l;
+    BinaryTreeNode* r;
+    long long data;
+};
+bool solve(long long n){
+    long long x;
+    cin>>x;
+    BinaryTreeNode k(x);
+    long long a[105];
+    for(long long i=0; i<n-1; i++){
+        cin>>a[i];
+    }
+    for(long long i=0; i<n-1; i++){
+        if(k.add_child(a[i])==false){
+            return false;
+        }
+    }
+    return true;
 }
 
 int main(){
     long long t;
-    std::cin>>t;
+    cin>>t;
     while(t--){
         long long n;
-        std::cin>>n;
-        long long x[n];
-        for(int i=0; i<n; i++){
-            std::cin>>x[i];
+        cin>>n;
+        if(solve(n)==true){
+            cout<<"YES"<<endl;
         }
-        merge_sort(x, n);
-        for(int i=0; i<n; i++){
-            std::cout<<x[i]<<' ';
+        else{
+            cout<<"NO"<<endl;
         }
-        std::cout<<std::endl;
-        bool chk=true;
-        for(int i=0; i<n-1; i++){
-            if(x[i]==x[i+1]){
-                chk=false;
-                break;
-            }
-        }
-        if(chk==true) std::cout<<"YES"<<std::endl;
-        else std::cout<<"NO"<<std::endl;
     }
 }
